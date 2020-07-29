@@ -1,3 +1,3 @@
 <resources>
-
+    <string name="cant_find_camera_hint">无法找到该设备的相机</string>
 </resources>

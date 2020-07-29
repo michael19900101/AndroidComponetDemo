@@ -18,6 +18,10 @@ android {
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
 
+        def filesAuthorityValue = applicationId + ".files"
+        // Creates a placeholder property to use in the manifest.
+        manifestPlaceholders =  [filesAuthority: filesAuthorityValue]
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -31,4 +35,7 @@ android {
 
 dependencies {
     implementation project(':common')
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
 }

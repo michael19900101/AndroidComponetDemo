@@ -16,13 +16,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.aotuman.component.MainActivity">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.aotuman.component.fileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+            <!--authorities为授权的签名，一般为包名+自定义的标识-->
+            <!--exported:要求必须为false，为true则会报安全异常。-->
+            <!--grantUriPermissions:true，表示授予 URI 临时访问权限。-->
+        </provider>
+
+        <activity android:name="com.aotuman.component.photo.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
