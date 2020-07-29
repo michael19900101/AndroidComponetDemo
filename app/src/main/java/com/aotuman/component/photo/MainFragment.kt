@@ -11,8 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.aotuman.common.permission.PermissionTipsDialog
+import com.aotuman.common.utils.Utils
 import com.aotuman.component.R
+import com.aotuman.watermark.WaterTransformation
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.main_fragment.*
 import java.util.*
@@ -22,6 +27,11 @@ class MainFragment : Fragment() {
 
     private lateinit var viewModel: PhotoViewModel
     private lateinit var navController: NavController
+
+    private var saveFileLength = 90
+    private var needCompress = false
+    private var targetWidth = 600
+    private var targetHeight = 840
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +82,8 @@ class MainFragment : Fragment() {
         }
         viewModel.result.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (viewModel.result.value == true) {
-                Glide.with(imageView).load(viewModel.fileDir+viewModel.fileName).into(imageView)
+                handlePhoto(viewModel.fileDir+viewModel.fileName)
+//                Glide.with(imageView).load(viewModel.fileDir+viewModel.fileName).into(imageView)
             }
         })
     }
@@ -82,5 +93,27 @@ class MainFragment : Fragment() {
         val fileName = UUID.randomUUID().toString() + ".png"
         viewModel.fileName = fileName
         navController.navigate(R.id.action_mainFragment_to_cameraFragment)
+    }
+
+    private fun handlePhoto (filePath: String) {
+        val waterStr = "我是美女我是美女我是美女我是美女我是美女我是美女我是美女我是美女我是美女我是美女我是美女我是美女我是美女我是美女"
+        val waterTransformation = WaterTransformation.Builder()
+            .setWaterStr(waterStr)
+            .setWatermarkposition("bottom")
+            .setSaveFilePath(filePath)
+            .setSaveFileLength(saveFileLength)
+            .setNeedCompress(needCompress)
+            .bulid()
+
+        val imageOption = Utils.getImageOption(filePath, targetWidth, targetHeight)
+
+        Glide.with(this)
+            .load(filePath)
+            .format(DecodeFormat.PREFER_RGB_565)
+            .override(imageOption[0], imageOption[1])
+            .apply(RequestOptions.bitmapTransform(waterTransformation))
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
+            .into(imageView)
     }
 }
