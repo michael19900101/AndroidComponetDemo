@@ -19,7 +19,7 @@ import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 
-public class WaterTransformation extends BitmapTransformation {
+class WaterTransformation extends BitmapTransformation {
     private static TextPaint textPaint;
     private String waterStr;
     private String watermarkposition;
@@ -79,7 +79,7 @@ public class WaterTransformation extends BitmapTransformation {
             return this;
         }
 
-        public WaterTransformation bulid() {
+        public WaterTransformation build() {
             return new WaterTransformation(this);
         }
     }
