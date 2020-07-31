@@ -22,7 +22,7 @@ import java.security.MessageDigest;
 class WaterTransformation extends BitmapTransformation {
     private static TextPaint textPaint;
     private String waterStr;
-    private String watermarkposition;
+    private WaterMarkPosition watermarkposition;
     private String saveFilePath;
     private int saveFileLength;
     private boolean needCompress;
@@ -45,7 +45,7 @@ class WaterTransformation extends BitmapTransformation {
         private String waterStr;
         private String saveFilePath;
         private int saveFileLength;
-        private String watermarkposition;
+        private WaterMarkPosition watermarkposition;
         private boolean needCompress;
         private TransformListener listener;
 
@@ -54,7 +54,7 @@ class WaterTransformation extends BitmapTransformation {
             return this;
         }
 
-        public Builder setWatermarkposition(String watermarkposition) {
+        public Builder setWatermarkposition(WaterMarkPosition watermarkposition) {
             this.watermarkposition = watermarkposition;
             return this;
         }
@@ -137,23 +137,28 @@ class WaterTransformation extends BitmapTransformation {
         int textHeight = textLayout.getHeight();
 
         canvas.save();
-        if ("top".equals(watermarkposition)) {
-            // 上方，左对齐
-            float x = textPadding;
-            float y = textPadding;
-            canvas.translate(x, y);
-        } else if ("center".equals(watermarkposition)) {
-            // 居中，左对齐
-            float x = textPadding;
-            float y = bitmapHeight / 2;
-            canvas.translate(x, y);
-        } else {
-            // 下方，左对齐
-            float x = textPadding;
-            float y = bitmapHeight - textHeight - textPadding;
-            canvas.translate(x, y);
+        float x;
+        float y;
+        switch (watermarkposition) {
+            case TOP:
+                // 上方，左对齐
+                x = textPadding;
+                y = textPadding;
+                canvas.translate(x, y);
+                break;
+            case CENTER:
+                // 居中，左对齐
+                x = textPadding;
+                y = bitmapHeight / 2;
+                canvas.translate(x, y);
+                break;
+            case BOTTOM:
+                // 下方，左对齐
+                x = textPadding;
+                y = bitmapHeight - textHeight - textPadding;
+                canvas.translate(x, y);
+                break;
         }
-
         textLayout.draw(canvas);
         canvas.restore();
         return oldBitmap;

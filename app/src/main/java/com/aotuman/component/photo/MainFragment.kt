@@ -13,6 +13,7 @@ import androidx.navigation.Navigation
 import com.aotuman.common.permission.PermissionTipsDialog
 import com.aotuman.component.R
 import com.aotuman.watermark.WaterMark
+import com.aotuman.watermark.WaterMarkPosition
 import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.main_fragment.*
 import java.util.*
@@ -92,7 +93,7 @@ class MainFragment : Fragment() {
         val targetHeight = 840
         WaterMark.Builder()
             .setWaterMarkText(waterStr)
-            .setWaterMarkPosition("bottom")
+            .setWaterMarkPosition(WaterMarkPosition.BOTTOM)
             .setSaveFilePath(filePath)
             .setSaveFileSize(saveFileLength)
             .setNeedCompress(needCompress)

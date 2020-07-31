@@ -11,7 +11,7 @@ import com.bumptech.glide.request.RequestOptions;
 public class WaterMark {
 
     private String waterMarkText;
-    private String waterMarkPosition;
+    private WaterMarkPosition waterMarkPosition;
     private String saveFilePath;
     private int saveFileSize;
     private boolean needCompress;
@@ -32,7 +32,7 @@ public class WaterMark {
 
     public static class Builder {
         private String waterMarkText;
-        private String waterMarkPosition;
+        private WaterMarkPosition waterMarkPosition;
         private String saveFilePath;
         private int saveFileSize;
         private boolean needCompress;
@@ -45,7 +45,7 @@ public class WaterMark {
             return this;
         }
 
-        public Builder setWaterMarkPosition(String waterMarkPosition) {
+        public Builder setWaterMarkPosition(WaterMarkPosition waterMarkPosition) {
             this.waterMarkPosition = waterMarkPosition;
             return this;
         }
