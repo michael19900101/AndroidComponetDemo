@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -138,7 +139,6 @@ public class Utils {
 
     public static int[] getImageOption(String path, int targetWidth, int targetHeight) {
         int[] imageOption = new int[2];
-        Rect rect;
         File file = new File(path);
         if (file == null || file.isDirectory()) {
             return imageOption;
@@ -152,6 +152,24 @@ public class Utils {
                 bitmapWidth, bitmapHeight, targetWidth, targetHeight));
         int resultWidth = 0;
         int resultHeight = 0;
+        int degree = getBitmapDegree(file.getAbsolutePath());
+        // 图片没有旋转
+        if (degree == 0) {
+            // 横拍, targetWidth与targetHeight互换
+            if (bitmapWidth > bitmapHeight) {
+                int temp = targetWidth;
+                targetWidth = targetHeight;
+                targetHeight = temp;
+            }
+        } else {
+            // 图片旋转
+            // 横拍, targetWidth与targetHeight互换
+            if (bitmapHeight > bitmapWidth) {
+                int temp = targetWidth;
+                targetWidth = targetHeight;
+                targetHeight = temp;
+            }
+        }
         if (bitmapWidth < targetWidth) {
             if (bitmapHeight > targetHeight) {
                 resultWidth = targetHeight * bitmapWidth / bitmapHeight;
@@ -174,11 +192,38 @@ public class Utils {
                 resultHeight = targetWidth * bitmapHeight / bitmapWidth;
             }
         }
+
         imageOption[0] = resultWidth;
         imageOption[1] = resultHeight;
         Log.d(TAG, String.format("[缩放后宽:%d，高：%d]",
                 resultWidth, resultHeight));
         return imageOption;
+    }
+
+    // 从指定路径下读取图片，并获取其EXIF信息。这里传入需要获取图片的sd卡路径
+    public static int getBitmapDegree(String path) {
+        int degree = 0;
+        try {
+            // 从指定路径下读取图片，并获取其EXIF信息
+            ExifInterface exifInterface = new ExifInterface(path);
+            // 获取图片的旋转信息
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return degree;
     }
 
     /***

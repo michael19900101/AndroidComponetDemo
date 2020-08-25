@@ -87,10 +87,10 @@ class MainFragment : Fragment() {
 
     private fun addWaterMark (filePath: String) {
         val waterStr = "中国始终支持多边主义、践行多边主义，以开放、合作、共赢精神同世界各国共谋发展"
-        val saveFileLength = 90
-        val needCompress = true
-        val targetWidth = 600
-        val targetHeight = 840
+        val saveFileLength = 1024
+        val needCompress = false
+        val targetWidth = 800
+        val targetHeight = 1200
         WaterMark.Builder()
             .setWaterMarkText(waterStr)
             .setWaterMarkPosition(WaterMarkPosition.BOTTOM)
